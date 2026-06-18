@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💸 PULL-TAPS 💸</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    user-select: none;
+}
+
+/* 360x760 모바일 완벽 핏 컴팩트 컨테이너 */
+.phone-container {
+    width: 360px;
+    height: 760px;
+    background: #1e293b;
+    border-radius: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 4px solid #334155;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 16px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+h1 {
+    color: #38bdf8;
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+}
+
+.description {
+    color: #94a3b8;
+    font-size: 11px;
+    margin: 2px 0 8px 0;
+    text-align: center;
+}
+
+/* 레벨 및 경험치 바 */
+.level-container {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.level-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: bold;
+}
+#levelDisplay { color: #a855f7; }
+#titleDisplay { color: #e2e8f0; font-weight: normal; font-size: 10px; }
+.xp-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: #1e293b;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.xp-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    transition: width 0.3s ease;
+}
+
+/* 대출 정보 바 */
+.loan-warning-bar {
+    width: 100%;
+    background: #451a03;
+    border: 1px solid #78350f;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #fdd835;
+    text-align: center;
+    box-sizing: border-box;
+    margin-bottom: 6px;
+    display: none;
+}
+
+/* 상태 표시 바 */
+.status-container {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.status-box {
+    flex: 1;
+    background: #0f172a;
+    padding: 8px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #334155;
+}
+
+.status-label {
+    font-size: 10px;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.status-value {
+    font-size: 13px;
+    font-weight: bold;
+}
+#balanceDisplay { color: #f59e0b; font-size: 14px; }
+#ticketDisplay { color: #38bdf8; }
+
+/* 풀탭 카드 영역 */
+.ticket {
+    position: relative;
+    width: 280px;
+    height: 290px;
+    background: #0f172a;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+    margin: 5px 0;
+}
+
+/* 결과창 */
+.result {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px;
+}
+
+.ticket-tier-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.tier-normal { background: #475569; color: white; }
+.tier-rare { background: #2563eb; color: white; }
+.tier-epic { background: #7c3aed; color: white; }
+
+.emoji-row {
+    font-size: 36px;
+    margin-bottom: 6px;
+    letter-spacing: 5px;
+}
+
+.amount {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-align: center;
+}
+.amount.win { color: #22c55e; }
+.amount.lose { color: #64748b; }
+
+.loan-deduct-text {
+    font-size: 11px;
+    color: #ef4444;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+.ticket-id {
+    font-size: 10px;
+    color: #475569;
+    margin-bottom: 15px;
+}
+
+.next-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 30px;
+    background: #38bdf8;
+    color: #0f172a;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    transition: all 0.2s;
+}
+.next-btn:hover { background: #0ea5e9; }
+
+/* 커버 */
+.cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 100%);
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    border-bottom: 6px dashed #94a3b8;
+    box-sizing: border-box;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.cover.locked {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    color: #64748b;
+    border-bottom: 6px dashed #334155;
+    cursor: not-allowed;
+}
+
+.cover-hint {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 6px;
+}
+
+.ticket.open .cover {
+    transform: translateY(-105%);
+}
+
+/* 하단 기능 제어 컨트롤러 탭 */
+.purchase-tab {
+    width: 100%;
+    background: #0f172a;
+    padding: 10px;
+    border-radius: 16px;
+    box-sizing: border-box;
+    border: 1px solid #334155;
+}
+
+.shop-title {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.buy-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.buy-row {
+    display: flex;
+    gap: 4px;
+}
+
+.buy-count-btn {
+    flex: 1;
+    padding: 8px 2px;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    background: #1e293b;
+    color: #e2e8f0;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.buy-count-btn:hover:not(:disabled) {
+    background: #334155;
+    border-color: #475569;
+}
+
+.buy-count-btn:disabled {
+    background: #0f172a;
+    color: #475569;
+    border-color: #1e293b;
+    cursor: not-allowed;
+}
+
+/* 대출 제어 패널 스타일 */
+.loan-panel {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    border-top: 1px dashed #334155;
+    padding-top: 6px;
+}
+.loan-btn {
+    flex: 1;
+    padding: 6px 0;
+    font-size: 11px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+}
+#loanGetBtn { background: #b45309; } 
+#loanGetBtn:hover { background: #92400e; }
+#loanPayBtn { background: #047857; } 
+#loanPayBtn:hover:not(:disabled) { background: #065f46; }
+#loanPayBtn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+
+/* 푸터 및 하단 리셋 링크 영역 */
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #475569;
+    margin-top: 5px;
+    padding: 0 4px;
+}
+.reset-link-btn {
+    background: none;
+    border: none;
+    color: #f43f5e;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+.reset-link-btn:hover {
+    background: rgba(244, 63, 94, 0.1);
+}
+
+/* 엔딩 오버레이 */
+.ending-screen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.95);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+.ending-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+.ending-title {
+    font-size: 26px;
+    color: #f59e0b;
+    margin-bottom: 15px;
+    font-weight: bold;
+    animation: bounce 1s infinite alternate;
+}
+.ending-body {
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+.restart-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #22c55e, #10b981);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+</style>
+</head>
+<body>
+
+<div class="phone-container">
+    <div class="ending-screen" id="endingScreen">
+        <div class="ending-title">👑 풀탭 마스터 등극!</div>
+        <div class="ending-body">
+            축하합니다!<br>
+            대출의 늪과 수많은 확률을 극복하고<br>
+            최종 목표 금액인 <strong>10,000,000원</strong>을 달성하셨습니다!<br><br>
+            당신은 최고의 자산가이자 지배자입니다.
+        </div>
+        <button class="restart-btn" onclick="resetGame()">🔄 처음부터 다시 도전</button>
+    </div>
+
+    <div>
+        <h1>💸 PULL-TAPS 💸</h1>
+        <p class="description">레벨을 올려 비싼 티켓을 해금하세요!</p>
+        
+        <div class="level-container">
+            <div class="level-info">
+                <span id="levelDisplay">Lv.1</span>
+                <span id="titleDisplay">초보 뽑기러</span>
+            </div>
+            <div class="xp-bar-bg">
+                <div class="xp-bar-fill" id="xpBar"></div>
+            </div>
+        </div>
+
+        <div class="loan-warning-bar" id="loanWarning">
+            ⚠️ 사채 이자 독촉 중! (오픈당 <span id="loanXpText">0</span>원 누수)
+        </div>
+
+        <div class="status-container">
+            <div class="status-box">
+                <span class="status-label">💰 나의 보유 자산</span>
+                <span class="status-value" id="balanceDisplay">10,000원</span>
+            </div>
+            <div class="status-box">
+                <span class="status-label">🎫 대기 중인 티켓 수</span>
+                <span class="status-value" id="ticketDisplay">0장</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket" id="ticket"></div>
+
+    <div class="purchase-tab">
+        <div class="shop-title">🛒 등급별 티켓 상점</div>
+        <div class="buy-actions">
+            <div class="buy-row">
+                <button class="buy-count-btn" id="buy_normal_1" onclick="buyTickets('normal', 1)">일반 1장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(500원)</span></button>
+                <button class="buy-count-btn" id="buy_normal_5" onclick="buyTickets('normal', 5)">일반 5장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(2.5천원)</span></button>
+            </div>
+            <div class="buy-row">
+                <button class="buy-count-btn" id="buy_rare_1" onclick="buyTickets('rare', 1)">레어 1장<br><span style="font-size:9px; font-weight:normal; color:#a855f7;">(5,000원)</span></button>
+                <button class="buy-count-btn" id="buy_rare_5" onclick="buyTickets('rare', 5)">레어 5장<br><span style="font-size:9px; font-weight:normal; color:#a855f7;">(2.5만원)</span></button>
+            </div>
+            <div class="buy-row">
+                <button class="buy-count-btn" id="buy_epic_1" onclick="buyTickets('epic', 1)">에픽 1장<br><span style="font-size:9px; font-weight:normal; color:#f43f5e;">(50,000원)</span></button>
+                <button class="buy-count-btn" id="buy_epic_5" onclick="buyTickets('epic', 5)">에픽 5장<br><span style="font-size:9px; font-weight:normal; color:#f43f5e;">(25만원)</span></button>
+            </div>
+        </div>
+
+        <div class="loan-panel">
+            <button class="loan-btn" id="loanGetBtn" onclick="takeLoan()">💵 사채 대출 (+5만)</button>
+            <button class="loan-btn" id="loanPayBtn" onclick="repayLoan()">✅ 대출 상환 (0원)</button>
+        </div>
+
+        <div class="footer-row">
+            <span>목표 금액: 10,000,000원</span>
+            <button class="reset-link-btn" onclick="confirmReset()">⚙️ 데이터 리셋</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const fruits = ["🍎","🍑","🍇","🍒","🍍","🍉"];
+
+const TICKET_CONFIG = {
+    normal: {
+        name: "일반", price: 500, reqLevel: 1, xpReward: 15, class: "tier-normal",
+        winRate: 0.12, rewards: [1000, 5000, 10000, 50000, 200000]
+    },
+    rare: {
+        name: "레어", price: 5000, reqLevel: 3, xpReward: 50, class: "tier-rare",
+        winRate: 0.15, rewards: [10000, 30000, 100000, 500000, 2000000]
+    },
+    epic: {
+        name: "에픽", price: 50000, reqLevel: 6, xpReward: 180, class: "tier-epic",
+        winRate: 0.18, rewards: [100000, 500000, 2000000, 5000000, 15000000]
+    }
+};
+
+let myBalance = 10000;
+let inventory = []; 
+const GOAL_BALANCE = 10000000;
+let loanCount = 0; 
+const LOAN_UNIT = 50000; 
+const INTEREST_PER_TICKET = 1000; 
+
+let currentLevel = 1;
+let currentXp = 0;
+const XP_PER_LEVEL = 100;
+const levelTitles = ["초보 뽑기러", "동네 오락실 단골", "풀탭 마니아", "프로 갬블러", "행운의 분석가", "하우스 설계자", "보이지 않는 손", "확률의 지배자"];
+
+function getTitle(level) {
+    if(level >= levelTitles.length) return levelTitles[levelTitles.length - 1];
+    return levelTitles[level - 1];
+}
+
+function saveGame() {
+    const saveData = {
+        balance: myBalance,
+        level: currentLevel,
+        xp: currentXp,
+        loan: loanCount
+    };
+    localStorage.setItem("pulltab_tycoon_save", JSON.stringify(saveData));
+}
+
+function loadGame() {
+    const saved = localStorage.getItem("pulltab_tycoon_save");
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            myBalance = parsed.balance ?? 10000;
+            currentLevel = parsed.level ?? 1;
+            currentXp = parsed.xp ?? 0;
+            loanCount = parsed.loan ?? 0;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+function updateUI() {
+    document.getElementById("balanceDisplay").innerText = `${myBalance.toLocaleString()}원`;
+    document.getElementById("ticketDisplay").innerText = `${inventory.length}장`;
+    
+    document.getElementById("levelDisplay").innerText = `Lv.${currentLevel}`;
+    document.getElementById("titleDisplay").innerText = getTitle(currentLevel);
+    
+    const xpPercent = Math.min((currentXp / XP_PER_LEVEL) * 100, 100);
+    document.getElementById("xpBar").style.width = `${xpPercent}%`;
+
+    const totalRepayAmount = loanCount * LOAN_UNIT;
+    const loanWarning = document.getElementById("loanWarning");
+    const loanPayBtn = document.getElementById("loanPayBtn");
+
+    if (loanCount > 0) {
+        loanWarning.style.display = "block";
+        document.getElementById("loanXpText").innerText = (loanCount * INTEREST_PER_TICKET).toLocaleString();
+        loanPayBtn.innerText = `✅ 상환 (${totalRepayAmount.toLocaleString()}원)`;
+        loanPayBtn.disabled = myBalance < totalRepayAmount;
+    } else {
+        loanWarning.style.display = "none";
+        loanPayBtn.innerText = `✅ 대출 상환 (0원)`;
+        loanPayBtn.disabled = true;
+    }
+
+    if (myBalance >= GOAL_BALANCE) {
+        document.getElementById("endingScreen").classList.add("active");
+        return;
+    }
+
+    Object.keys(TICKET_CONFIG).forEach(tier => {
+        const config = TICKET_CONFIG[tier];
+        const isLevelLocked = currentLevel < config.reqLevel;
+        
+        const btn1 = document.getElementById(`buy_${tier}_1`);
+        const btn5 = document.getElementById(`buy_${tier}_5`);
+
+        if (isLevelLocked) {
+            btn1.innerHTML = `🔒 Lv.${config.reqLevel}`;
+            btn5.innerHTML = `🔒 Lv.${config.reqLevel}`;
+            btn1.disabled = true;
+            btn5.disabled = true;
+        } else {
+            if(tier === 'normal') {
+                btn1.innerHTML = `일반 1장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(500원)</span>`;
+                btn5.innerHTML = `일반 5장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(2.5천원)</span>`;
+            } else if(tier === 'rare') {
+                btn1.innerHTML = `레어 1장<br><span style="font-size:9px; font-weight:normal; color:#a855f7;">(5,000원)</span>`;
+                btn5.innerHTML = `레어 5장<br><span style="font-size:9px; font-weight:normal; color:#a855f7;">(2.5만원)</span>`;
+            } else if(tier === 'epic') {
+                btn1.innerHTML = `에픽 1장<br><span style="font-size:9px; font-weight:normal; color:#f43f5e;">(50,000원)</span>`;
+                btn5.innerHTML = `에픽 5장<br><span style="font-size:9px; font-weight:normal; color:#f43f5e;">(25만원)</span>`;
+            }
+            btn1.disabled = myBalance < config.price;
+            btn5.disabled = myBalance < (config.price * 5);
+        }
+    });
+
+    prepareNextCard();
+}
+
+function takeLoan() {
+    myBalance += LOAN_UNIT;
+    loanCount++;
+    saveGame();
+    updateUI();
+}
+
+function repayLoan() {
+    const totalRepayAmount = loanCount * LOAN_UNIT;
+    if (myBalance >= totalRepayAmount) {
+        myBalance -= totalRepayAmount;
+        loanCount = 0;
+        saveGame();
+        updateUI();
+    }
+}
+
+function buyTickets(tier, amount) {
+    const config = TICKET_CONFIG[tier];
+    const totalCost = config.price * amount;
+    
+    if (myBalance < totalCost || currentLevel < config.reqLevel) return;
+
+    myBalance -= totalCost;
+    for(let i=0; i<amount; i++) {
+        inventory.push({ tier: tier });
+    }
+    saveGame();
+    updateUI();
+}
+
+function prepareNextCard() {
+    const ticketBox = document.getElementById("ticket");
+
+    if (inventory.length <= 0) {
+        if (!ticketBox.querySelector('.locked')) {
+            ticketBox.innerHTML = `
+                <div class="cover locked">
+                    <div>보유 중인 티켓 없음</div>
+                    <div class="cover-hint">하단에서 티켓을 구매하세요</div>
+                </div>
+            `;
+            ticketBox.classList.remove("open");
+            ticketBox.onclick = null; 
+        }
+        return;
+    }
+
+    // 이미 펼쳐진 결과 카드가 열려있거나 준비 중이라면 중복 덮어쓰기 방지
+    if (ticketBox.querySelector('.result') && !ticketBox.querySelector('.locked') && inventory.length > 0) {
+        return;
+    }
+
+    const currentTicket = inventory[0];
+    const config = TICKET_CONFIG[currentTicket.tier];
+
+    const f1 = fruits[Math.floor(Math.random() * fruits.length)];
+    const f2 = fruits[Math.floor(Math.random() * fruits.length)];
+    const num = Math.floor(Math.random() * 9000 + 1000);
+    
+    const isWin = Math.random() < config.winRate;
+    let finalMoney = 0;
+    
+    if (isWin) {
+        const roll = Math.random();
+        if (roll < 0.50) finalMoney = config.rewards[0];
+        else if (roll < 0.80) finalMoney = config.rewards[1];
+        else if (roll < 0.93) finalMoney = config.rewards[2];
+        else if (roll < 0.98) finalMoney = config.rewards[3];
+        else finalMoney = config.rewards[4];
+    }
+
+    const currentInterest = loanCount * INTEREST_PER_TICKET;
+
+    ticketBox.innerHTML = `
+        <div class="result">
+            <span class="ticket-tier-badge ${config.class}">${config.name} 등급</span>
+            <div class="emoji-row">${f1}${f2}</div>
+            <div class="amount ${isWin ? 'win' : 'lose'}">
+                ${isWin ? '🎉 +' + finalMoney.toLocaleString() + '원' : '💀 꽝 (0원)'}
+            </div>
+            ${loanCount > 0 ? `<div class="loan-deduct-text">💸 이자 차감: -${currentInterest.toLocaleString()}원</div>` : ''}
+            <div class="ticket-id">ID: #${num}</div>
+            <button class="next-btn" id="nextBtn" style="display:none;">
+                ${inventory.length - 1 > 0 ? '⏭️ 다음 티켓 오픈' : '🏁 확인 완료'}
+            </button>
+        </div>
+        <div class="cover">
+            <div>${config.name} PULL UP ⬆️</div>
+            <div class="cover-hint">위로 밀어서 오픈 (남은 티켓: ${inventory.length}장)</div>
+        </div>
+    `;
+    
+    ticketBox.classList.remove("open");
+
+    ticketBox.onclick = function(e) {
+        if (ticketBox.classList.contains("open") || e.target.id === "nextBtn") return;
+
+        ticketBox.classList.add("open");
+        
+        inventory.shift(); 
+        if (isWin) myBalance += finalMoney;
+        myBalance -= currentInterest;
+
+        currentXp += config.xpReward;
+        while (currentXp >= XP_PER_LEVEL) {
+            currentLevel++;
+            currentXp -= XP_PER_LEVEL;
+        }
+
+        document.getElementById("nextBtn").style.display = "block";
+        saveGame();
+        
+        // 상단 자산 및 티켓 카운트 강제 동기화
+        document.getElementById("balanceDisplay").innerText = `${myBalance.toLocaleString()}원`;
+        document.getElementById("ticketDisplay").innerText = `${inventory.length}장`;
+    };
+
+    const nextBtn = document.getElementById("nextBtn");
+    nextBtn.onclick = function(e) {
+        e.stopPropagation(); 
+        ticketBox.innerHTML = ""; // 컨텐츠 완전 비우기
+        updateUI();
+    };
+}
+
+function confirmReset() {
+    if (confirm("정말로 모든 진행 상황을 리셋하고 처음부터 다시 시작하시겠습니까?")) {
+        resetGame();
+    }
+}
+
+function resetGame() {
+    localStorage.removeItem("pulltab_tycoon_save");
+    myBalance = 10000;
+    inventory = [];
+    currentLevel = 1;
+    currentXp = 0;
+    loanCount = 0;
+    
+    document.getElementById("endingScreen").classList.remove("active");
+    
+    const ticketBox = document.getElementById("ticket");
+    ticketBox.innerHTML = `
+        <div class="cover locked">
+            <div>보유 중인 티켓 없음</div>
+            <div class="cover-hint">하단에서 티켓을 구매하세요</div>
+        </div>
+    `;
+    ticketBox.classList.remove("open");
+    ticketBox.onclick = null;
+
+    updateUI();
+}
+
+loadGame();
+updateUI();
+</script>
+
+</body>
+</html>
