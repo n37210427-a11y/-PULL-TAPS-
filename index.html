@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💸 PULL-TAPS 💸</title>
 
 <style>
@@ -17,9 +17,6 @@ body {
     align-items: center;
     min-height: 100vh;
     user-select: none;
-    /* iOS 터치 하이라이트 제거 및 터치 행동 제어 */
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
 }
 
 /* 360x760 모바일 완벽 핏 컴팩트 컨테이너 */
@@ -52,6 +49,30 @@ h1 {
     font-size: 11px;
     margin: 2px 0 8px 0;
     text-align: center;
+}
+
+/* 엔딩 해금 버튼 스타일 */
+.unlock-ending-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #0f172a;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    animation: pulse 1.5s infinite;
+    display: none;
+    text-align: center;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
 
 /* 레벨 및 경험치 바 */
@@ -218,7 +239,13 @@ h1 {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 font-weight: bold;
+    background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 100%);
+    color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
     font-size: 18px;
     border-bottom: 6px dashed #94a3b8;
     box-sizing: border-box;
@@ -415,6 +442,8 @@ h1 {
         <h1>💸 PULL-TAPS 💸</h1>
         <p class="description">레벨을 올려 비싼 티켓을 해금하세요!</p>
         
+        <button class="unlock-ending-btn" id="unlockEndingBtn" onclick="triggerEnding()">👑 엔딩 해금하기</button>
+
         <div class="level-container">
             <div class="level-info">
                 <span id="levelDisplay">Lv.1</span>
@@ -557,9 +586,12 @@ function updateUI() {
         loanPayBtn.disabled = true;
     }
 
-    if (myBalance >= GOAL_BALANCE) {
-        document.getElementById("endingScreen").classList.add("active");
-        return;
+    // 엔딩 해금 버튼 노출 조건 판단 (자산 1000만원 이상 AND 대출 잔액 0원)
+    const unlockEndingBtn = document.getElementById("unlockEndingBtn");
+    if (myBalance >= GOAL_BALANCE && loanCount === 0) {
+        unlockEndingBtn.style.display = "block";
+    } else {
+        unlockEndingBtn.style.display = "none";
     }
 
     Object.keys(TICKET_CONFIG).forEach(tier => {
@@ -591,6 +623,12 @@ function updateUI() {
     });
 
     prepareNextCard();
+}
+
+function triggerEnding() {
+    if (myBalance >= GOAL_BALANCE && loanCount === 0) {
+        document.getElementById("endingScreen").classList.add("active");
+    }
 }
 
 function takeLoan() {
@@ -680,8 +718,8 @@ function prepareNextCard() {
             </button>
         </div>
         <div class="cover">
-            <div>${config.name} PULL UP ⬆️</div>
-            <div class="cover-hint">위로 밀어서 오픈 (남은 티켓: ${inventory.length}장)</div>
+       s     <div>${config.name} Tap to open▶️ </div>
+            <div class="cover-hint">터치 해서오픈 (남은 티켓: ${inventory.length}장)</div>
         </div>
     `;
     
@@ -748,16 +786,6 @@ function resetGame() {
 
 loadGame();
 updateUI();
-
-// 2. 아이폰 사파리 전용 더블 클릭 확대 방지 스크립트 적용 완료
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function (event) {
-    const now = (new Date()).getTime();
-    if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-    }
-    lastTouchEnd = now;
-}, false);
 </script>
 
 </body>
