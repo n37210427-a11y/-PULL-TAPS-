@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>💸 PULL-TAPS 💸</title>
 
 <style>
@@ -17,6 +17,9 @@ body {
     align-items: center;
     min-height: 100vh;
     user-select: none;
+    /* iOS 터치 하이라이트 제거 및 터치 행동 제어 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 /* 360x760 모바일 완벽 핏 컴팩트 컨테이너 */
@@ -215,13 +218,7 @@ h1 {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 100%);
-    color: #1e293b;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
+    background: linear-gradient(135deg, #e5e7eb 0%, #cbd5e1 font-weight: bold;
     font-size: 18px;
     border-bottom: 6px dashed #94a3b8;
     box-sizing: border-box;
@@ -644,7 +641,6 @@ function prepareNextCard() {
         return;
     }
 
-    // 이미 펼쳐진 결과 카드가 열려있거나 준비 중이라면 중복 덮어쓰기 방지
     if (ticketBox.querySelector('.result') && !ticketBox.querySelector('.locked') && inventory.length > 0) {
         return;
     }
@@ -709,7 +705,6 @@ function prepareNextCard() {
         document.getElementById("nextBtn").style.display = "block";
         saveGame();
         
-        // 상단 자산 및 티켓 카운트 강제 동기화
         document.getElementById("balanceDisplay").innerText = `${myBalance.toLocaleString()}원`;
         document.getElementById("ticketDisplay").innerText = `${inventory.length}장`;
     };
@@ -717,7 +712,7 @@ function prepareNextCard() {
     const nextBtn = document.getElementById("nextBtn");
     nextBtn.onclick = function(e) {
         e.stopPropagation(); 
-        ticketBox.innerHTML = ""; // 컨텐츠 완전 비우기
+        ticketBox.innerHTML = ""; 
         updateUI();
     };
 }
@@ -753,6 +748,16 @@ function resetGame() {
 
 loadGame();
 updateUI();
+
+// 2. 아이폰 사파리 전용 더블 클릭 확대 방지 스크립트 적용 완료
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
 </script>
 
 </body>
