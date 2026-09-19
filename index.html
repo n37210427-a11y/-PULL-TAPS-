@@ -31,15 +31,26 @@ body {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 16px;
+    padding: 16px 16px;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+/* 화면 전체가 반짝이는 잭팟 이펙트 배경 스타일 */
+@keyframes screenJackpotFlash {
+    0% { background: #1e293b; border-color: #f59e0b; box-shadow: 0 0 40px #fbbf24, inset 0 0 30px #f59e0b; }
+    50% { background: #451a03; border-color: #ef4444; box-shadow: 0 0 80px #ef4444, inset 0 0 60px #f59e0b; }
+    100% { background: #1e293b; border-color: #f59e0b; box-shadow: 0 0 40px #fbbf24, inset 0 0 30px #f59e0b; }
+}
+.phone-container.screen-flash {
+    animation: screenJackpotFlash 0.5s infinite alternate;
 }
 
 h1 {
     color: #38bdf8;
-    font-size: 20px;
+    font-size: 19px;
     margin: 0;
     text-align: center;
 }
@@ -47,22 +58,22 @@ h1 {
 .description {
     color: #94a3b8;
     font-size: 11px;
-    margin: 2px 0 8px 0;
+    margin: 2px 0 6px 0;
     text-align: center;
 }
 
 /* 엔딩 해금 버튼 스타일 */
 .unlock-ending-btn {
     width: 100%;
-    padding: 10px;
+    padding: 8px;
     background: linear-gradient(135deg, #fbbf24, #f59e0b);
     color: #0f172a;
     border: none;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 12px;
     cursor: pointer;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
     animation: pulse 1.5s infinite;
     display: none;
@@ -83,7 +94,7 @@ h1 {
     border-radius: 8px;
     padding: 4px 8px;
     box-sizing: border-box;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -116,12 +127,12 @@ h1 {
     background: #451a03;
     border: 1px solid #78350f;
     border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 11px;
+    padding: 3px 8px;
+    font-size: 10px;
     color: #fdd835;
     text-align: center;
     box-sizing: border-box;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     display: none;
 }
 
@@ -130,13 +141,13 @@ h1 {
     width: 100%;
     display: flex;
     gap: 8px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .status-box {
     flex: 1;
     background: #0f172a;
-    padding: 8px;
+    padding: 6px;
     border-radius: 10px;
     text-align: center;
     border: 1px solid #334155;
@@ -146,26 +157,26 @@ h1 {
     font-size: 10px;
     color: #94a3b8;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .status-value {
     font-size: 13px;
     font-weight: bold;
 }
-#balanceDisplay { color: #f59e0b; font-size: 14px; }
+#balanceDisplay { color: #f59e0b; font-size: 13px; }
 #ticketDisplay { color: #38bdf8; }
 
 /* 풀탭 카드 영역 */
 .ticket {
     position: relative;
     width: 280px;
-    height: 290px;
+    height: 235px;
     background: #0f172a;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-    margin: 5px 0;
+    margin: 3px 0;
 }
 
 /* 결과창 */
@@ -178,14 +189,14 @@ h1 {
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    padding: 15px;
+    padding: 12px;
 }
 
 .ticket-tier-badge {
     font-size: 10px;
     padding: 2px 8px;
     border-radius: 20px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: bold;
 }
 .tier-normal { background: #475569; color: white; }
@@ -193,41 +204,41 @@ h1 {
 .tier-epic { background: #7c3aed; color: white; }
 
 .emoji-row {
-    font-size: 36px;
-    margin-bottom: 6px;
+    font-size: 30px;
+    margin-bottom: 3px;
     letter-spacing: 5px;
 }
 
 .amount {
-    font-size: 22px;
+    font-size: 19px;
     font-weight: bold;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     text-align: center;
 }
 .amount.win { color: #22c55e; }
 .amount.lose { color: #64748b; }
 
 .loan-deduct-text {
-    font-size: 11px;
+    font-size: 10px;
     color: #ef4444;
-    margin-bottom: 6px;
+    margin-bottom: 3px;
     font-weight: bold;
 }
 
 .ticket-id {
     font-size: 10px;
     color: #475569;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .next-btn {
-    padding: 8px 18px;
+    padding: 5px 14px;
     border: none;
     border-radius: 30px;
     background: #38bdf8;
     color: #0f172a;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 11px;
     cursor: pointer;
     box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
     transition: all 0.2s;
@@ -246,7 +257,7 @@ h1 {
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 17px;
     border-bottom: 6px dashed #94a3b8;
     box-sizing: border-box;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -263,18 +274,34 @@ h1 {
 .cover-hint {
     font-size: 10px;
     color: #64748b;
-    margin-top: 6px;
+    margin-top: 5px;
 }
 
 .ticket.open .cover {
     transform: translateY(-105%);
 }
 
+/* 잭팟/최고등급 대박 이펙트 스타일 */
+@keyframes jackpotGlow {
+    0% { background: rgba(15, 23, 42, 1); box-shadow: inset 0 0 15px #fbbf24; }
+    50% { background: rgba(120, 53, 15, 0.8); box-shadow: inset 0 0 35px #f59e0b, 0 0 20px #fbbf24; }
+    100% { background: rgba(15, 23, 42, 1); box-shadow: inset 0 0 15px #fbbf24; }
+}
+.jackpot-effect {
+    animation: jackpotGlow 0.8s infinite alternate;
+}
+.jackpot-text {
+    color: #fef08a !important;
+    text-shadow: 0 0 10px #f59e0b, 0 0 20px #eab308;
+    transform: scale(1.08);
+    transition: transform 0.2s;
+}
+
 /* 하단 기능 제어 컨트롤러 탭 */
 .purchase-tab {
     width: 100%;
     background: #0f172a;
-    padding: 10px;
+    padding: 8px 10px;
     border-radius: 16px;
     box-sizing: border-box;
     border: 1px solid #334155;
@@ -283,15 +310,15 @@ h1 {
 .shop-title {
     font-size: 11px;
     color: #94a3b8;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-weight: bold;
 }
 
 .buy-actions {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin-bottom: 6px;
+    gap: 3px;
+    margin-bottom: 4px;
 }
 
 .buy-row {
@@ -301,7 +328,7 @@ h1 {
 
 .buy-count-btn {
     flex: 1;
-    padding: 8px 2px;
+    padding: 5px 2px;
     border: 1px solid #334155;
     border-radius: 6px;
     background: #1e293b;
@@ -324,18 +351,48 @@ h1 {
     cursor: not-allowed;
 }
 
+/* 전체열기 버튼 스타일 */
+.batch-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 3px;
+}
+.batch-btn {
+    flex: 1;
+    padding: 6px 2px;
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fef08a;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    transition: all 0.2s;
+}
+.batch-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+.batch-btn:disabled {
+    background: #0f172a;
+    color: #475569;
+    border-color: #1e293b;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
 /* 대출 제어 패널 스타일 */
 .loan-panel {
     display: flex;
     gap: 4px;
-    margin-top: 4px;
     border-top: 1px dashed #334155;
-    padding-top: 6px;
+    padding-top: 4px;
 }
 .loan-btn {
     flex: 1;
-    padding: 6px 0;
-    font-size: 11px;
+    padding: 5px 0;
+    font-size: 10px;
     font-weight: bold;
     border: none;
     border-radius: 6px;
@@ -355,8 +412,8 @@ h1 {
     align-items: center;
     font-size: 10px;
     color: #475569;
-    margin-top: 5px;
-    padding: 0 4px;
+    margin-top: 3px;
+    padding: 0 2px;
 }
 .reset-link-btn {
     background: none;
@@ -365,7 +422,7 @@ h1 {
     cursor: pointer;
     font-size: 10px;
     font-weight: bold;
-    padding: 2px 5px;
+    padding: 2px 4px;
     border-radius: 4px;
 }
 .reset-link-btn:hover {
@@ -394,39 +451,39 @@ h1 {
     pointer-events: auto;
 }
 .ending-title {
-    font-size: 26px;
+    font-size: 25px;
     color: #f59e0b;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     font-weight: bold;
     animation: bounce 1s infinite alternate;
 }
 .ending-body {
-    font-size: 13px;
+    font-size: 12px;
     color: #cbd5e1;
     line-height: 1.6;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 .restart-btn {
-    padding: 12px 30px;
+    padding: 10px 25px;
     border: none;
     border-radius: 30px;
     background: linear-gradient(135deg, #22c55e, #10b981);
     color: white;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
 }
 
 @keyframes bounce {
     from { transform: translateY(0); }
-    to { transform: translateY(-10px); }
+    to { transform: translateY(-8px); }
 }
 </style>
 </head>
 <body>
 
-<div class="phone-container">
+<div class="phone-container" id="phoneContainer">
     <div class="ending-screen" id="endingScreen">
         <div class="ending-title">👑 풀탭 마스터 등극!</div>
         <div class="ending-body">
@@ -475,6 +532,11 @@ h1 {
     <div class="purchase-tab">
         <div class="shop-title">🛒 등급별 티켓 상점</div>
         <div class="buy-actions">
+            <!-- 전체열기 버튼 -->
+            <div class="batch-row">
+                <button class="batch-btn" id="batchAllBtn" onclick="openAllTickets()">⚡ 전체열기</button>
+            </div>
+
             <div class="buy-row">
                 <button class="buy-count-btn" id="buy_normal_1" onclick="buyTickets('normal', 1)">일반 1장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(500원)</span></button>
                 <button class="buy-count-btn" id="buy_normal_5" onclick="buyTickets('normal', 5)">일반 5장<br><span style="font-size:9px; font-weight:normal; color:#94a3b8;">(2.5천원)</span></button>
@@ -586,13 +648,14 @@ function updateUI() {
         loanPayBtn.disabled = true;
     }
 
-    // 엔딩 해금 버튼 노출 조건 판단 (자산 1000만원 이상 AND 대출 잔액 0원)
     const unlockEndingBtn = document.getElementById("unlockEndingBtn");
     if (myBalance >= GOAL_BALANCE && loanCount === 0) {
         unlockEndingBtn.style.display = "block";
     } else {
         unlockEndingBtn.style.display = "none";
     }
+
+    document.getElementById("batchAllBtn").disabled = inventory.length === 0;
 
     Object.keys(TICKET_CONFIG).forEach(tier => {
         const config = TICKET_CONFIG[tier];
@@ -662,11 +725,107 @@ function buyTickets(tier, amount) {
     updateUI();
 }
 
-function prepareNextCard() {
+// 전체열기 함수 (버그 수정: 돈이 즉시 반영되고 확인 완료 시점의 오동작 방지)
+function openAllTickets() {
+    if (inventory.length === 0) return;
+
+    let totalPurchaseCost = 0;
+    inventory.forEach(ticket => {
+        totalPurchaseCost += TICKET_CONFIG[ticket.tier].price;
+    });
+
+    let totalWinMoney = 0;
+    let totalXpGained = 0;
+    let totalInterestPaid = 0;
+    let hasJackpot = false;
+
+    inventory.forEach(ticket => {
+        const config = TICKET_CONFIG[ticket.tier];
+        const isWin = Math.random() < config.winRate;
+        
+        if (isWin) {
+            const roll = Math.random();
+            let finalMoney = 0;
+            if (roll < 0.50) finalMoney = config.rewards[0];
+            else if (roll < 0.80) finalMoney = config.rewards[1];
+            else if (roll < 0.93) finalMoney = config.rewards[2];
+            else if (roll < 0.98) finalMoney = config.rewards[3];
+            else {
+                finalMoney = config.rewards[4];
+                hasJackpot = true; 
+            }
+            totalWinMoney += finalMoney;
+        }
+        
+        totalInterestPaid += (loanCount * INTEREST_PER_TICKET);
+        totalXpGained += config.xpReward;
+    });
+
+    const openedCount = inventory.length;
+    inventory = []; 
+
+    // 돈과 경험치, 레벨업을 열린 순간 곧바로 즉시 반영 및 저장
+    myBalance += totalWinMoney;
+    myBalance -= totalInterestPaid;
+
+    // 만약 다 열고 나서의 자산이 구매한 돈보다 적거나 마이너스가 되면 효과 제거
+    if (myBalance < totalPurchaseCost) {
+        hasJackpot = false;
+    }
+
+    currentXp += totalXpGained;
+    while (currentXp >= XP_PER_LEVEL) {
+        currentLevel++;
+        currentXp -= XP_PER_LEVEL;
+    }
+
+    saveGame();
+
+    const phoneContainer = document.getElementById("phoneContainer");
     const ticketBox = document.getElementById("ticket");
 
+    if (hasJackpot) {
+        phoneContainer.classList.add("screen-flash");
+        ticketBox.className = `ticket open jackpot-effect`;
+    } else {
+        phoneContainer.classList.remove("screen-flash");
+        ticketBox.className = `ticket open`;
+    }
+
+    ticketBox.innerHTML = `
+        <div class="result" style="background:#0f172a;">
+            <span class="ticket-tier-badge tier-epic">⚡ 전체티켓 일괄 개봉</span>
+            <div class="emoji-row">${hasJackpot ? '🌟👑🔥' : '📦✨'}</div>
+            <div class="amount ${totalWinMoney - totalInterestPaid >= 0 ? 'win' : 'lose'} ${hasJackpot ? 'jackpot-text' : ''}">
+                ${(totalWinMoney - totalInterestPaid) >= 0 ? '+' : ''}${(totalWinMoney - totalInterestPaid).toLocaleString()}원
+            </div>
+            <div class="loan-deduct-text">열린 티켓: ${openedCount}장 / 이자 누적: -${totalInterestPaid.toLocaleString()}원</div>
+            <div class="ticket-id">획득 경험치: +${totalXpGained} XP ${hasJackpot ? '<br><strong style="color:#f59e0b;">✨ 최고 등급 잭팟 대폭발! ✨</strong>' : ''}</div>
+            <button class="next-btn" id="nextBtn">확인 완료</button>
+        </div>
+    `;
+
+    // 상단 UI도 열린 직후 즉시 갱신
+    document.getElementById("balanceDisplay").innerText = `${myBalance.toLocaleString()}원`;
+    document.getElementById("ticketDisplay").innerText = `${inventory.length}장`;
+
+    document.getElementById("nextBtn").onclick = function(e) {
+        e.stopPropagation();
+        phoneContainer.classList.remove("screen-flash");
+        ticketBox.className = "ticket";
+        ticketBox.innerHTML = "";
+        updateUI();
+    };
+}
+
+function prepareNextCard() {
+    const ticketBox = document.getElementById("ticket");
+    const phoneContainer = document.getElementById("phoneContainer");
+
     if (inventory.length <= 0) {
+        phoneContainer.classList.remove("screen-flash");
         if (!ticketBox.querySelector('.locked')) {
+            ticketBox.className = "ticket";
             ticketBox.innerHTML = `
                 <div class="cover locked">
                     <div>보유 중인 티켓 없음</div>
@@ -692,6 +851,7 @@ function prepareNextCard() {
     
     const isWin = Math.random() < config.winRate;
     let finalMoney = 0;
+    let isMaxWin = false;
     
     if (isWin) {
         const roll = Math.random();
@@ -699,18 +859,36 @@ function prepareNextCard() {
         else if (roll < 0.80) finalMoney = config.rewards[1];
         else if (roll < 0.93) finalMoney = config.rewards[2];
         else if (roll < 0.98) finalMoney = config.rewards[3];
-        else finalMoney = config.rewards[4];
+        else {
+            finalMoney = config.rewards[4];
+            isMaxWin = true; 
+        }
     }
 
     const currentInterest = loanCount * INTEREST_PER_TICKET;
 
+    let effectiveMaxWin = isMaxWin;
+    const projectedBalanceAfterOpen = myBalance + (isWin ? finalMoney : 0) - currentInterest;
+    if (projectedBalanceAfterOpen < config.price) {
+        effectiveMaxWin = false; 
+    }
+
+    if (effectiveMaxWin) {
+        phoneContainer.classList.add("screen-flash");
+        ticketBox.className = `ticket jackpot-effect`;
+    } else {
+        phoneContainer.classList.remove("screen-flash");
+        ticketBox.className = `ticket`;
+    }
+
     ticketBox.innerHTML = `
         <div class="result">
             <span class="ticket-tier-badge ${config.class}">${config.name} 등급</span>
-            <div class="emoji-row">${f1}${f2}</div>
-            <div class="amount ${isWin ? 'win' : 'lose'}">
+            <div class="emoji-row">${effectiveMaxWin ? '🌟' + f1 + f2 + '🌟' : f1 + f2}</div>
+            <div class="amount ${isWin ? 'win' : 'lose'} ${effectiveMaxWin ? 'jackpot-text' : ''}">
                 ${isWin ? '🎉 +' + finalMoney.toLocaleString() + '원' : '💀 꽝 (0원)'}
             </div>
+            ${effectiveMaxWin ? '<div style="color:#f59e0b; font-size:10px; font-weight:bold; margin-bottom:2px;">✨ 역대급 최고 상금 당첨! ✨</div>' : ''}
             ${loanCount > 0 ? `<div class="loan-deduct-text">💸 이자 차감: -${currentInterest.toLocaleString()}원</div>` : ''}
             <div class="ticket-id">ID: #${num}</div>
             <button class="next-btn" id="nextBtn" style="display:none;">
@@ -719,7 +897,7 @@ function prepareNextCard() {
         </div>
         <div class="cover">
             <div>${config.name} Tap to open▶️ </div>
-            <div class="cover-hint">터치 해서오픈 (남은 티켓: ${inventory.length}장)</div>
+            <div class="cover-hint">터치해서 오픈 (남은 티켓: ${inventory.length}장)</div>
         </div>
     `;
     
@@ -750,6 +928,8 @@ function prepareNextCard() {
     const nextBtn = document.getElementById("nextBtn");
     nextBtn.onclick = function(e) {
         e.stopPropagation(); 
+        phoneContainer.classList.remove("screen-flash");
+        ticketBox.className = "ticket";
         ticketBox.innerHTML = ""; 
         updateUI();
     };
@@ -770,8 +950,10 @@ function resetGame() {
     loanCount = 0;
     
     document.getElementById("endingScreen").classList.remove("active");
+    document.getElementById("phoneContainer").classList.remove("screen-flash");
     
     const ticketBox = document.getElementById("ticket");
+    ticketBox.className = "ticket";
     ticketBox.innerHTML = `
         <div class="cover locked">
             <div>보유 중인 티켓 없음</div>
